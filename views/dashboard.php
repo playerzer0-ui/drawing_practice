@@ -3,7 +3,7 @@
 <main>
     <nav class="main-header">
         <h1>Dashboard</h1>
-        <a href=""><button class="header-btn">% PROFILE %</button></a>
+        <a href="../controller/index.php?action=show_profile"><button class="header-btn">% PROFILE %</button></a>
     </nav>
     <div class="dashboard-options">
         <a href="../controller/index.php?action=show_line_tracing_tasks"><button><img src="../images/line-trace.jpg" alt=""><span class="hover-text">Line Tracing Tasks</span></button></a>
