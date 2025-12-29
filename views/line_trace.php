@@ -1,7 +1,16 @@
 <?php include '../views/header.php'; ?>
 
 <main>
-    <h1>Line Tracing Tasks</h1>
+    <div class="main-header">
+        <button onclick="history.back()" class="header-btn"><- BACK</button>
+        <?php if($action == "show_line_tracing_tasks"): ?>
+        <h1>Line Tracing Tasks</h1>
+        <?php elseif($action == "show_object_to_drawing_tasks"): ?>
+        <h1>Object to Drawing Tasks</h1>
+        <?php endif; ?>
+        <button class="header-btn">% PROFILE %</button>
+    </div>
+
     <div class="cards">
         <?php
             if (isset($images) && is_array($images)) {

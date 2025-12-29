@@ -36,7 +36,7 @@
             // Decode JSON into PHP array
             $images = json_decode($output, true);
             $title = "Object to Drawing Tasks";
-            require_once("../views/object_image.php");
+            require_once("../views/line_trace.php");
             break;
         case "show_prompt_to_picture_tasks":
             break;
