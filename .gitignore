@@ -17,6 +17,9 @@ venv/
 Thumbs.db
 
 # cache files
-*pinterest_images.json
-*pinterest_objects.json
-*prompts_cache.json
+/cache/*.json
+!/cache/.gitkeep
+
+# images
+/images/*
+!/images/static/

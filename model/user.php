@@ -27,6 +27,23 @@ class User {
         return null;
     }
 
+    public function updateCounter($userID, $taskType) {
+        $columnMap = [
+            'line_tracing' => 'line_trace_tasks_completed',
+            'object_to_drawing' => 'object_to_drawing_tasks_completed',
+            'prompt_to_picture' => 'prompt_to_picture_tasks_completed'
+        ];
+
+        if (!array_key_exists($taskType, $columnMap)) {
+            throw new InvalidArgumentException("Invalid task type: $taskType");
+        }
+
+        $column = $columnMap[$taskType];
+
+        $stmt = $this->db->prepare("UPDATE users SET $column = $column + 1 WHERE id = ?");
+        $stmt->execute([$userID]);
+    }
+
     public function createUser($username, $email, $password) {
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 

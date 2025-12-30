@@ -8,11 +8,11 @@ https://artpromptgenerator.com/
 todo:
 - [x] download image
 - [x] activate database
-- [] upload image
 - [x] create profile
 - [] add charts
 - [x] prompt draw page
 
-- [] remove from json
+- [x] upload image
+- [x] remove from json
 - [] if json file is empty, delete json
 - [] refresh the json
