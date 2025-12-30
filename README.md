@@ -6,9 +6,13 @@ https://artpromptgenerator.com/
 
 
 todo:
-- [] download image
+- [x] download image
 - [x] activate database
 - [] upload image
 - [x] create profile
 - [] add charts
-- [] prompt draw page
+- [x] prompt draw page
+
+- [] remove from json
+- [] if json file is empty, delete json
+- [] refresh the json

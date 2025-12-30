@@ -20,7 +20,7 @@
                     <div class="card">
                         <img src="<?php echo htmlspecialchars($url); ?>" alt="Avatar">
                         <div class="card-content">
-                            <button class="btn top-left">download</button>
+                            <button class="btn top-left" onclick="downloadImage('<?php echo $url; ?>', '<?php echo $id; ?>')">Download</button>
                             <button class="btn top-right">upload</button>
                             <h2 class="bottom-id"><?php echo htmlspecialchars($id); ?></h2>
                         </div>
@@ -32,5 +32,7 @@
         ?>
     </div>
 </main>
+
+<script src="../js/task.js" async defer></script>
 
 <?php include '../views/footer.php'; ?>
