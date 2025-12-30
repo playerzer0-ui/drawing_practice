@@ -8,7 +8,7 @@
         <?php elseif($action == "show_object_to_drawing_tasks"): ?>
         <h1>Object to Drawing Tasks</h1>
         <?php endif; ?>
-        <button class="header-btn">% PROFILE %</button>
+        <a href="../controller/index.php?action=show_profile"><button class="header-btn">% PROFILE %</button></a>
     </div>
 
     <div class="cards">

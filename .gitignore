@@ -15,3 +15,8 @@ venv/
 # OS files
 .DS_Store
 Thumbs.db
+
+# cache files
+*pinterest_images.json
+*pinterest_objects.json
+*prompts_cache.json

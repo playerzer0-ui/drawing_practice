@@ -8,6 +8,9 @@
     if($action == null){
         $action = "show_login";
     }
+    if(!isset($_SESSION["user_id"])){
+        $action = "show_login";
+    }
 
     $user = new User($db);
 
@@ -50,7 +53,7 @@
             break;
 
         case "show_line_tracing_tasks":
-            $command = '..\.venv\Scripts\python.exe main.py https://ie.pinterest.com/search/pins/?q=mangab%26w pinterest_images';
+            $command = '..\.venv\Scripts\python.exe main.py https://ie.pinterest.com/search/pins/?q=mangab%26w ' . $_SESSION["user_name"] . '_pinterest_images';
             $output = shell_exec($command);
 
             // Decode JSON into PHP array
@@ -60,7 +63,7 @@
             break;
 
         case "show_object_to_drawing_tasks":
-            $command = '..\.venv\Scripts\python.exe main.py https://ie.pinterest.com/search/pins/?q=objects pinterest_objects';
+            $command = '..\.venv\Scripts\python.exe main.py https://ie.pinterest.com/search/pins/?q=objects ' . $_SESSION["user_name"] . '_pinterest_images';
             $output = shell_exec($command);
 
             // Decode JSON into PHP array
@@ -70,7 +73,7 @@
             break;
 
         case "show_prompt_to_picture_tasks":
-            $command = '..\.venv\Scripts\python.exe prompt.py';
+            $command = '..\.venv\Scripts\python.exe prompt.py ' . $_SESSION["user_name"];
             $output = shell_exec($command);
 
             $prompts = json_decode($output, true);

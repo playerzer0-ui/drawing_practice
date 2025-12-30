@@ -1,11 +1,19 @@
 import asyncio
 import json
 import os
+import sys
 import uuid
 from playwright.async_api import async_playwright
 
+if len(sys.argv) != 2:
+    print(json.dumps({"error": "Expected 1 argument1: username"}))
+    sys.exit(1)
+
 QUERY = "https://artpromptgenerator.com/"
-CACHE_FILE = "prompts_cache.json"
+CACHE_FOLDER = os.path.join(os.path.dirname(__file__), "..", "cache")
+os.makedirs(CACHE_FOLDER, exist_ok=True)  # create folder if missing
+
+CACHE_FILE = os.path.join(CACHE_FOLDER, f"{sys.argv[1]}_prompts_cache.json")
 
 def save_cache(images):
     with open(CACHE_FILE, "w", encoding="utf-8") as f:

@@ -5,11 +5,14 @@ import sys
 from playwright.async_api import async_playwright
 
 if len(sys.argv) != 3:
-    print(json.dumps({"error": "Expected 2 arguments: query and cache_name"}))
+    print(json.dumps({"error": "Expected 3 arguments: query and cache_name"}))
     sys.exit(1)
 
-QUERY = sys.argv[1]        # e.g. "objects"
-CACHE_FILE = f"{sys.argv[2]}.json"
+QUERY = sys.argv[1]
+CACHE_FOLDER = os.path.join(os.path.dirname(__file__), "..", "cache")
+os.makedirs(CACHE_FOLDER, exist_ok=True)  # create folder if missing
+
+CACHE_FILE = os.path.join(CACHE_FOLDER, f"{sys.argv[2]}.json")
 
 def save_cache(images):
     with open(CACHE_FILE, "w", encoding="utf-8") as f:
