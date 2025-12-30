@@ -1,0 +1,92 @@
+[
+    {
+        "id": "97fa8dcc-cde0-48f9-bb33-bbc4061ebb80",
+        "THEME:": "Whispering Ruins",
+        "ITEM:": "Wax Seal",
+        "CHARACTER:": "Courier",
+        "COLOR PALETTE:": "Mauve Bronze Linen",
+        "MOOD:": "Quiet Dread",
+        "CHALLENGE:": "Only outlines and shadows"
+    },
+    {
+        "id": "76a7ce36-25aa-47de-8ccc-8f4768e339b8",
+        "THEME:": "Iron Forge",
+        "ITEM:": "Hinged Locket",
+        "CHARACTER:": "Beekeeper",
+        "COLOR PALETTE:": "Ivory Indigo Rust",
+        "MOOD:": "Harmonious",
+        "CHALLENGE:": "Symbolic repetition"
+    },
+    {
+        "id": "b698f2d1-b2ec-483d-a67c-b2226c2fe1ae",
+        "THEME:": "Fog Valley",
+        "ITEM:": "Stone Amulet",
+        "CHARACTER:": "Canal Boatman",
+        "COLOR PALETTE:": "Fawn Slate Jade",
+        "MOOD:": "Eager",
+        "CHALLENGE:": "Use only stippling"
+    },
+    {
+        "id": "99824315-e748-45a7-bcbc-8b91f2d957cc",
+        "THEME:": "Sunrise Coast",
+        "ITEM:": "Copper Wire",
+        "CHARACTER:": "Stage Illusionist",
+        "COLOR PALETTE:": "Ivory Peach Olive",
+        "MOOD:": "Regretful",
+        "CHALLENGE:": "No outlines"
+    },
+    {
+        "id": "f2d67db1-40cf-496d-bdb8-1d23599636f7",
+        "THEME:": "Bamboo Grove",
+        "ITEM:": "Carved Wand",
+        "CHARACTER:": "Mask Dancer",
+        "COLOR PALETTE:": "Seafoam Charcoal Gold",
+        "MOOD:": "Determined",
+        "CHALLENGE:": "Mirror the image"
+    },
+    {
+        "id": "a8c3b655-177e-47e5-90e9-da33d61741c7",
+        "THEME:": "Golden Lake",
+        "ITEM:": "Copper Filigree",
+        "CHARACTER:": "Grove Keeper",
+        "COLOR PALETTE:": "Ink Clay Coral",
+        "MOOD:": "Humbled",
+        "CHALLENGE:": "Combine two prompts"
+    },
+    {
+        "id": "0be6421e-6b49-4e29-9ef0-804f7f173167",
+        "THEME:": "Crumbling Cathedral",
+        "ITEM:": "Leather Strap",
+        "CHARACTER:": "Sword Dancer",
+        "COLOR PALETTE:": "Emerald Cream Charcoal",
+        "MOOD:": "Whimsical",
+        "CHALLENGE:": "Reflective surface"
+    },
+    {
+        "id": "6a27564d-d141-4f05-b99f-b000d5d11b40",
+        "THEME:": "Abandoned Carnival",
+        "ITEM:": "Beaded Bracelet",
+        "CHARACTER:": "Wilderness Tracker",
+        "COLOR PALETTE:": "Indigo Wheat Coral",
+        "MOOD:": "Serene",
+        "CHALLENGE:": "Draw it as a poster"
+    },
+    {
+        "id": "0c17c875-ee78-46bd-af88-1f70ccd3ec25",
+        "THEME:": "Overlook Hill",
+        "ITEM:": "Tarnished Bell",
+        "CHARACTER:": "Beekeeper",
+        "COLOR PALETTE:": "Clay Silver Ink",
+        "MOOD:": "Thrilled",
+        "CHALLENGE:": "Add motion blur"
+    },
+    {
+        "id": "26eed31d-61f9-43ad-99a5-45f32b1759f3",
+        "THEME:": "Ivy Tower",
+        "ITEM:": "Tarnished Bell",
+        "CHARACTER:": "Captain",
+        "COLOR PALETTE:": "Brick Cream Teal",
+        "MOOD:": "Regretful",
+        "CHALLENGE:": "Start with a scribble"
+    }
+]

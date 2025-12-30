@@ -70,6 +70,13 @@
             break;
 
         case "show_prompt_to_picture_tasks":
+            $command = '..\.venv\Scripts\python.exe prompt.py';
+            $output = shell_exec($command);
+
+            $prompts = json_decode($output, true);
+
+            $title = "Prompt to Picture Tasks";
+            require_once("../views/prompts.php");
             break;
 
         case "show_profile":

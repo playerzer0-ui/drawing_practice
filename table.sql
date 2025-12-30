@@ -11,7 +11,7 @@ CREATE TABLE users (
 
 
 CREATE TABLE tasks (
-    id char(36) PRIMARY KEY,
+    id char(60) PRIMARY KEY,
     task_type VARCHAR(50) NOT NULL,
     description TEXT,
     image_url TEXT,
