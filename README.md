@@ -14,17 +14,9 @@ todo:
 - [x] remove from json
 - [x] if json file is empty, delete json
 - [x] refresh the json
+- [x] upload prompts too
 
 - [] add charts
 - [] provide reports every month
 - [] maybe I need a loading screen for all this loading
-- [] upload prompts too
-
-
-<!-- PROMPT DATA -->
-                        <input type="hidden" name="theme" value="<?= htmlspecialchars($prompts[$i]["THEME:"]) ?>">
-                        <input type="hidden" name="item" value="<?= htmlspecialchars($prompts[$i]["ITEM:"]) ?>">
-                        <input type="hidden" name="character" value="<?= htmlspecialchars($prompts[$i]["CHARACTER:"]) ?>">
-                        <input type="hidden" name="palette" value="<?= htmlspecialchars($prompts[$i]["COLOR PALETTE:"]) ?>">
-                        <input type="hidden" name="mood" value="<?= htmlspecialchars($prompts[$i]["MOOD:"]) ?>">
-                        <input type="hidden" name="challenge" value="<?= htmlspecialchars($prompts[$i]["CHALLENGE:"]) ?>">
+- [] add a navbar for consistency

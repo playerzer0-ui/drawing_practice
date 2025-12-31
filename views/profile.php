@@ -1,12 +1,6 @@
 <?php include '../views/header.php'; ?>
 
 <main>
-    <nav class="main-header">
-        <button onclick="history.back()" class="header-btn"><- BACK</button>
-        <h1>---______----^v^---__~_~_`-`--`</h1>
-        <h1>__--_0-)-_-)_0--_#_)_@)_!)#$(*!)$</h1>
-    </nav>
-    
     <div class="profile-info">
         <h1>User Profile</h1>
         <p><?php echo $_SESSION["user_id"]; ?></p>

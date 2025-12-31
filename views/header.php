@@ -15,3 +15,11 @@
         <link rel="stylesheet" href="../css/styles.css">
     </head>
     <body>
+        <nav class="main-header">
+            <h1><?php echo $title; ?></h1>
+            <a href="../controller/index.php?action=show_dashboard"><button class="header-btn">* Dashboard *</button></a>
+            <a href="../controller/index.php?action=show_line_tracing_tasks"><button class="header-btn">& Line Tracing Tasks &</button></a>
+            <a href="../controller/index.php?action=show_object_to_drawing_tasks"><button class="header-btn">$ Object to Drawing Tasks $</button></a>
+            <a href="../controller/index.php?action=show_prompt_to_picture_tasks"><button class="header-btn"># Prompt to Picture Tasks #</button></a>
+            <a href="../controller/index.php?action=show_profile"><button class="header-btn">% PROFILE %</button></a>
+        </nav>

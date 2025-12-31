@@ -1,11 +1,6 @@
 <?php include "header.php"; ?>
 
 <main>
-    <div class="main-header">
-        <button onclick="history.back()" class="header-btn"><- BACK</button>
-                <h1>Prompts to Picture Tasks</h1>
-                <button class="header-btn">% PROFILE %</button>
-    </div>
     <ul class="cards">
         <?php for ($i = 0; $i < count($prompts); $i++): ?>
             <div class="card">
