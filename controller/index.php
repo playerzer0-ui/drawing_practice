@@ -5,16 +5,27 @@ require_once("../model/database.php");
 require_once("../model/user.php");
 require_once("../model/task.php");
 
-$action = filter_input(INPUT_GET, "action");
-if ($action == null) {
+$action = filter_input(INPUT_GET, "action") ?? "show_login";
+$publicActions = ["show_login", "login", "register"];
+
+if (!isset($_SESSION["user_id"]) && !in_array($action, $publicActions)) {
     $action = "show_login";
 }
-if (!isset($_SESSION["user_id"])) {
-    $action = "show_login";
+
+if (isset($_SESSION["user_id"])) {
+    $lineCommand = '..\.venv\Scripts\python.exe main.py https://ie.pinterest.com/search/pins/?q=mangab%26w '
+        . $_SESSION["user_name"] . '_pinterest_images';
+
+    $objectCommand = '..\.venv\Scripts\python.exe main.py https://ie.pinterest.com/search/pins/?q=objects '
+        . $_SESSION["user_name"] . '_pinterest_objects';
+
+    $promptCommand = '..\.venv\Scripts\python.exe prompt.py '
+        . $_SESSION["user_name"];
 }
 
 $user = new User($db);
 $task = new Task($db);
+
 
 switch ($action) {
     case "show_login":
@@ -55,8 +66,7 @@ switch ($action) {
         break;
 
     case "show_line_tracing_tasks":
-        $command = '..\.venv\Scripts\python.exe main.py https://ie.pinterest.com/search/pins/?q=mangab%26w ' . $_SESSION["user_name"] . '_pinterest_images';
-        $output = shell_exec($command);
+        $output = shell_exec($lineCommand);
 
         // Decode JSON into PHP array
         $images = json_decode($output, true);
@@ -66,8 +76,7 @@ switch ($action) {
         break;
 
     case "show_object_to_drawing_tasks":
-        $command = '..\.venv\Scripts\python.exe main.py https://ie.pinterest.com/search/pins/?q=objects ' . $_SESSION["user_name"] . '_pinterest_images';
-        $output = shell_exec($command);
+        $output = shell_exec($objectCommand);
 
         // Decode JSON into PHP array
         $images = json_decode($output, true);
@@ -77,8 +86,7 @@ switch ($action) {
         break;
 
     case "show_prompt_to_picture_tasks":
-        $command = '..\.venv\Scripts\python.exe prompt.py ' . $_SESSION["user_name"];
-        $output = shell_exec($command);
+        $output = shell_exec($promptCommand);
 
         $prompts = json_decode($output, true);
 
@@ -116,31 +124,54 @@ switch ($action) {
         $image_url = "images/$userID/$year/$filename";
 
         // Save task
-        $task = new Task($db);
-        $task->submitTask(
-            $image_id,
-            $task_type,
-            "User submission",
-            $image_url
-        );
+        if($task_type === "prompt_to_picture"){
+            $descriptionParts = [
+                "THEME:" . filter_input(INPUT_POST, "theme"),
+                "ITEM:" . filter_input(INPUT_POST, "item"),
+                "CHARACTER:" . filter_input(INPUT_POST, "character"),
+                "COLOR PALETTE:" . filter_input(INPUT_POST, "palette"),
+                "MOOD:" . filter_input(INPUT_POST, "mood"),
+                "CHALLENGE:" . filter_input(INPUT_POST, "challenge"),
+            ];
+
+            $description = implode("$$", $descriptionParts);
+
+            $task->submitTask(
+                $image_id,
+                $task_type,
+                $description,
+                $image_url
+            );
+        }
+        else{
+            $task->submitTask(
+                $image_id,
+                $task_type,
+                "User submission",
+                $image_url
+            );
+        }
 
         //update counter
         $user->updateCounter($userID, $task_type);
+
         //remove json entry
         if($task_type === "prompt_to_picture"){
-            $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_prompts.json";
+            $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_prompts_cache.json";
+            ensureCacheFresh($filePath, $promptCommand);
         } 
         else if($task_type === "line_tracing"){
             $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_pinterest_images.json";
+            ensureCacheFresh($filePath, $lineCommand);
         }
         else{
             $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_objects_images.json";
+            ensureCacheFresh($filePath, $objectCommand);
         }
         $task->removeJsonById($filePath, filter_input(INPUT_POST, "image_id"));
 
         header("Location: ../controller/index.php?action=show_" . $task_type . "_tasks");
         exit;
-
 
     case "show_profile":
         $title = "Profile";
@@ -163,4 +194,54 @@ function session_create($user)
     $_SESSION["line_tracing_tasks_completed"] = $user['line_tracing_tasks_completed'] ?? 0;
     $_SESSION["object_to_drawing_tasks_completed"] = $user['object_to_drawing_tasks_completed'] ?? 0;
     $_SESSION["prompt_to_picture_tasks_completed"] = $user['prompt_to_picture_tasks_completed'] ?? 0;
+}
+
+function ensureCacheFresh(
+    string $jsonPath,
+    string $pythonCommand,
+    bool $forceRefresh = false
+): array {
+
+    $needsRefresh = $forceRefresh;
+
+    if (!$forceRefresh) {
+        // Only auto-check if not forcing
+        if (!file_exists($jsonPath)) {
+            $needsRefresh = true;
+        } else {
+            $content = trim(file_get_contents($jsonPath));
+
+            if ($content === '') {
+                $needsRefresh = true;
+            } else {
+                $decoded = json_decode($content, true);
+                if (!is_array($decoded) || count($decoded) === 0) {
+                    $needsRefresh = true;
+                }
+            }
+        }
+    }
+
+    if ($needsRefresh) {
+        if (file_exists($jsonPath)) {
+            unlink($jsonPath);
+        }
+
+        shell_exec($pythonCommand);
+
+        if (!file_exists($jsonPath)) {
+            throw new Exception("Cache refresh failed: $jsonPath not created");
+        }
+
+        $decoded = json_decode(file_get_contents($jsonPath), true);
+
+        if (!is_array($decoded)) {
+            throw new Exception("Cache refresh failed: invalid JSON");
+        }
+
+        return $decoded;
+    }
+
+    // No refresh needed
+    return json_decode(file_get_contents($jsonPath), true);
 }

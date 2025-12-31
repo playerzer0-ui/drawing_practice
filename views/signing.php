@@ -5,6 +5,7 @@
         <div class="form-container">
             <!-- Login Form (Front) -->
             <form class="form login-form" action="../controller/index.php?action=login" method="post">
+                <p><?php echo $error_message ?? ''; ?></p>
                 <h1>Login</h1>
                 <label for="login-email">Email:</label>
                 <input type="text" id="login-email" name="email" required>
