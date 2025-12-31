@@ -8,4 +8,7 @@
     </div>
 </main>
 
+<script src="../js/script.js" async defer></script>
+<script src="../js/task.js" async defer></script>
+
 <?php include '../views/footer.php'; ?>

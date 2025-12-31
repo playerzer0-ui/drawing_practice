@@ -165,7 +165,7 @@ switch ($action) {
             ensureCacheFresh($filePath, $lineCommand);
         }
         else{
-            $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_objects_images.json";
+            $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_pinterest_objects.json";
             ensureCacheFresh($filePath, $objectCommand);
         }
         $task->removeJsonById($filePath, filter_input(INPUT_POST, "image_id"));
@@ -176,6 +176,11 @@ switch ($action) {
     case "show_profile":
         $title = "Profile";
         require_once("../views/profile.php");
+        break;
+
+    case "show_loading":
+        $title = "Loading...";
+        require_once("../views/loading.php");
         break;
 
     case "logout":

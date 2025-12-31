@@ -15,8 +15,9 @@ todo:
 - [x] if json file is empty, delete json
 - [x] refresh the json
 - [x] upload prompts too
+- [x] add a navbar for consistency
 
 - [] add charts
 - [] provide reports every month
 - [] maybe I need a loading screen for all this loading
-- [] add a navbar for consistency
+- [] it doesn't feel random, it needs to be randomized

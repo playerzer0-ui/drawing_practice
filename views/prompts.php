@@ -15,7 +15,8 @@
                     <form
                         action="../controller/index.php?action=submit_task"
                         method="POST"
-                        enctype="multipart/form-data">
+                        enctype="multipart/form-data"
+                        >
 
                         <input type="hidden" name="task_type" value="<?= htmlspecialchars($type_of_task) ?>">
                         
@@ -28,13 +29,10 @@
                         <input type="hidden" name="mood" value="<?= htmlspecialchars($prompts[$i]["MOOD:"]) ?>">
                         <input type="hidden" name="challenge" value="<?= htmlspecialchars($prompts[$i]["CHALLENGE:"]) ?>">
 
-                        <input type="file" name="image"
-                            accept="image/*"
-                            hidden
-                            onchange="this.form.submit()">
+                        <input type="file" name="image" accept="image/*" hidden>
 
                         <button type="button" class="btn top-right"
-                            onclick="this.previousElementSibling.click()">
+                            onclick="$(this).prev('input[type=file]').click()">
                             upload
                         </button>
                     </form>
@@ -43,5 +41,8 @@
         <?php endfor; ?>
     </ul>
 </main>
+
+<script src="../js/script.js" async defer></script>
+<script src="../js/task.js" async defer></script>
 
 <?php include "footer.php"; ?>

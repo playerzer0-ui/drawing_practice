@@ -13,6 +13,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
         <link rel="stylesheet" href="../css/styles.css">
+        <link rel="stylesheet" href="../css/loader.css">
     </head>
     <body>
         <nav class="main-header">
@@ -23,3 +24,7 @@
             <a href="../controller/index.php?action=show_prompt_to_picture_tasks"><button class="header-btn"># Prompt to Picture Tasks #</button></a>
             <a href="../controller/index.php?action=show_profile"><button class="header-btn">% PROFILE %</button></a>
         </nav>
+        <div class="loader-UI" id="loader">
+            <h1>Loading...</h1>
+            <div class="loader"></div>
+        </div>
