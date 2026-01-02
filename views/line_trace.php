@@ -19,6 +19,7 @@
 
                             <input type="hidden" name="task_type" value="<?= htmlspecialchars($type_of_task) ?>">
                             <input type="hidden" name="image_id" value="<?= htmlspecialchars($id) ?>">
+                            <input type="hidden" name="original_image_url" value="<?= htmlspecialchars($url) ?>">
 
                             <input type="file" name="image" accept="image/*" hidden>
 

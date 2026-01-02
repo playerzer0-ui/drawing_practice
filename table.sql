@@ -14,6 +14,7 @@ CREATE TABLE tasks (
     id char(60) PRIMARY KEY,
     task_type VARCHAR(50) NOT NULL,
     description TEXT,
+    original_image_url TEXT,
     image_url TEXT,
     userID char(36),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

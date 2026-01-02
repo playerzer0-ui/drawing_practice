@@ -67,9 +67,21 @@ switch ($action) {
 
     case "show_line_tracing_tasks":
         $output = shell_exec($lineCommand);
+        $images = json_decode($output, true) ?? [];
 
-        // Decode JSON into PHP array
-        $images = json_decode($output, true);
+        // Fetch already-used images
+        $usedUrls = $task->getUsedOriginalUrls(
+            $_SESSION['user_id'],
+            'line_tracing'
+        );
+
+        // Filter them out
+        $images = array_values(array_filter($images, function ($img) use ($usedUrls) {
+            return !in_array($img['url'], $usedUrls, true);
+        }));
+
+        // OPTIONAL: shuffle for randomness
+        shuffle($images);
         $title = "Line Tracing Tasks";
         $type_of_task = "line_tracing";
         require_once("../views/line_trace.php");
@@ -77,13 +89,27 @@ switch ($action) {
 
     case "show_object_to_drawing_tasks":
         $output = shell_exec($objectCommand);
+        $images = json_decode($output, true) ?? [];
 
-        // Decode JSON into PHP array
-        $images = json_decode($output, true);
+        // Fetch already-used images
+        $usedUrls = $task->getUsedOriginalUrls(
+            $_SESSION['user_id'],
+            'object_to_drawing'
+        );
+
+        // Filter them out
+        $images = array_values(array_filter($images, function ($img) use ($usedUrls) {
+            return !in_array($img['url'], $usedUrls, true);
+        }));
+
+        // OPTIONAL: shuffle for randomness
+        shuffle($images);
+
         $title = "Object to Drawing Tasks";
         $type_of_task = "object_to_drawing";
         require_once("../views/line_trace.php");
         break;
+
 
     case "show_prompt_to_picture_tasks":
         $output = shell_exec($promptCommand);
@@ -101,21 +127,21 @@ switch ($action) {
         }
 
         $task_type = filter_input(INPUT_POST, "task_type");
-        //userID + image id
-        $image_id  = $_SESSION['user_id'] . "__" . filter_input(INPUT_POST, "image_id");
         $userID    = $_SESSION['user_id'];
+        $task_id   = uuidv4();
+        $year      = date("Y");
 
-        $year = date("Y");
+        $original_image_url = filter_input(INPUT_POST, "original_image_url", FILTER_SANITIZE_URL);
 
         // Build folders
-       $baseDir = dirname(__DIR__) . "/images/$userID/$year";
+        $baseDir = dirname(__DIR__) . "/images/$userID/$year";
         if (!is_dir($baseDir)) {
             mkdir($baseDir, 0777, true);
         }
 
         // File info
-        $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        $filename = $image_id . "." . strtolower($ext);
+        $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+        $filename = $task_id . "." . $ext;
         $targetPath = "$baseDir/$filename";
 
         move_uploaded_file($_FILES['image']['tmp_name'], $targetPath);
@@ -123,55 +149,51 @@ switch ($action) {
         // Relative path for DB
         $image_url = "images/$userID/$year/$filename";
 
-        // Save task
-        if($task_type === "prompt_to_picture"){
-            $descriptionParts = [
+        // Description handling
+        if ($task_type === "prompt_to_picture") {
+            $description = implode("$$", [
                 "THEME:" . filter_input(INPUT_POST, "theme"),
                 "ITEM:" . filter_input(INPUT_POST, "item"),
                 "CHARACTER:" . filter_input(INPUT_POST, "character"),
                 "COLOR PALETTE:" . filter_input(INPUT_POST, "palette"),
                 "MOOD:" . filter_input(INPUT_POST, "mood"),
                 "CHALLENGE:" . filter_input(INPUT_POST, "challenge"),
-            ];
-
-            $description = implode("$$", $descriptionParts);
-
-            $task->submitTask(
-                $image_id,
-                $task_type,
-                $description,
-                $image_url
-            );
-        }
-        else{
-            $task->submitTask(
-                $image_id,
-                $task_type,
-                "User submission",
-                $image_url
-            );
+            ]);
+        } else {
+            $description = "User submission";
         }
 
-        //update counter
+        // Save task
+        $task->submitTask(
+            $task_id,
+            $task_type,
+            $description,
+            $original_image_url,
+            $image_url
+        );
+
+        // update counter
         $user->updateCounter($userID, $task_type);
 
-        //remove json entry
-        if($task_type === "prompt_to_picture"){
-            $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_prompts_cache.json";
+        // remove cache entry (still uses source image ID)
+        $sourceImageId = filter_input(INPUT_POST, "image_id");
+
+        if ($task_type === "prompt_to_picture") {
+            $filePath = dirname(__DIR__) . "/cache/{$_SESSION["user_name"]}_prompts_cache.json";
             ensureCacheFresh($filePath, $promptCommand);
-        } 
-        else if($task_type === "line_tracing"){
-            $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_pinterest_images.json";
+        } elseif ($task_type === "line_tracing") {
+            $filePath = dirname(__DIR__) . "/cache/{$_SESSION["user_name"]}_pinterest_images.json";
             ensureCacheFresh($filePath, $lineCommand);
-        }
-        else{
-            $filePath = dirname(__DIR__) . "/cache/".$_SESSION["user_name"]."_pinterest_objects.json";
+        } else {
+            $filePath = dirname(__DIR__) . "/cache/{$_SESSION["user_name"]}_pinterest_objects.json";
             ensureCacheFresh($filePath, $objectCommand);
         }
-        $task->removeJsonById($filePath, filter_input(INPUT_POST, "image_id"));
+
+        $task->removeJsonById($filePath, $sourceImageId);
 
         header("Location: ../controller/index.php?action=show_" . $task_type . "_tasks");
         exit;
+        break;
 
     case "show_profile":
         $title = "Profile";
@@ -199,6 +221,21 @@ function session_create($user)
     $_SESSION["line_tracing_tasks_completed"] = $user['line_tracing_tasks_completed'] ?? 0;
     $_SESSION["object_to_drawing_tasks_completed"] = $user['object_to_drawing_tasks_completed'] ?? 0;
     $_SESSION["prompt_to_picture_tasks_completed"] = $user['prompt_to_picture_tasks_completed'] ?? 0;
+}
+
+function uuidv4(): string
+{
+    return sprintf(
+        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        random_int(0, 0xffff),
+        random_int(0, 0xffff),
+        random_int(0, 0xffff),
+        random_int(0, 0x0fff) | 0x4000,
+        random_int(0, 0x3fff) | 0x8000,
+        random_int(0, 0xffff),
+        random_int(0, 0xffff),
+        random_int(0, 0xffff)
+    );
 }
 
 function ensureCacheFresh(

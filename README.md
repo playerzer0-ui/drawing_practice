@@ -16,8 +16,10 @@ todo:
 - [x] refresh the json
 - [x] upload prompts too
 - [x] add a navbar for consistency
+- [x] maybe I need a loading screen for all this loading
 
 - [] add charts
 - [] provide reports every month
-- [] maybe I need a loading screen for all this loading
-- [] it doesn't feel random, it needs to be randomized
+- [] I got a btter idea, add a new column for original image, that way u have the power to compare stuff
+
+
