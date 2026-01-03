@@ -172,9 +172,6 @@ switch ($action) {
             $image_url
         );
 
-        // update counter
-        $user->updateCounter($userID, $task_type);
-
         // remove cache entry (still uses source image ID)
         $sourceImageId = filter_input(INPUT_POST, "image_id");
 
@@ -192,7 +189,6 @@ switch ($action) {
         $task->removeJsonById($filePath, $sourceImageId);
 
         header("Location: ../controller/index.php?action=show_" . $task_type . "_tasks");
-        exit;
         break;
 
     case "show_profile":
