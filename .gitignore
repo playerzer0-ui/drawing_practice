@@ -23,3 +23,6 @@ Thumbs.db
 # images
 /images/*
 !/images/static/
+
+# vendor
+/vendor/
