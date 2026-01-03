@@ -22,7 +22,6 @@
             <a href="../controller/index.php?action=show_line_tracing_tasks"><button class="header-btn">& Line Tracing Tasks &</button></a>
             <a href="../controller/index.php?action=show_object_to_drawing_tasks"><button class="header-btn">$ Object to Drawing Tasks $</button></a>
             <a href="../controller/index.php?action=show_prompt_to_picture_tasks"><button class="header-btn"># Prompt to Picture Tasks #</button></a>
-            <a href="../controller/index.php?action=show_profile"><button class="header-btn">% PROFILE %</button></a>
         </nav>
         <div class="loader-UI" id="loader">
             <h1>Loading...</h1>

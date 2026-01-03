@@ -75,4 +75,54 @@ class Task
         return array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'original_image_url');
     }
 
+    public function getWeeklyTaskMatrix(string $userID): array
+    {
+        $sql = "
+        SELECT
+            DAYOFWEEK(created_at) AS day_index,
+            task_type,
+            COUNT(*) AS total
+        FROM tasks
+        WHERE userID = :userID
+          AND created_at >= (CURDATE() - INTERVAL (DAYOFWEEK(CURDATE()) - 1) DAY)
+          AND created_at <  (CURDATE() - INTERVAL (DAYOFWEEK(CURDATE()) - 1) DAY + INTERVAL 7 DAY)
+        GROUP BY day_index, task_type
+        ORDER BY day_index
+    ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':userID', $userID);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        // Day labels (Sunday first)
+        $days = [
+            1 => 'Sunday',
+            2 => 'Monday',
+            3 => 'Tuesday',
+            4 => 'Wednesday',
+            5 => 'Thursday',
+            6 => 'Friday',
+            7 => 'Saturday'
+        ];
+
+        // Initialize matrix with zeros
+        $matrix = [];
+        foreach ($days as $day) {
+            $matrix[$day] = [
+                'line_tracing' => 0,
+                'object_to_drawing' => 0,
+                'prompt_to_picture' => 0
+            ];
+        }
+
+        // Fill matrix with actual data
+        foreach ($rows as $row) {
+            $dayName = $days[(int)$row['day_index']];
+            $matrix[$dayName][$row['task_type']] = (int)$row['total'];
+        }
+
+        return $matrix;
+    }
 }

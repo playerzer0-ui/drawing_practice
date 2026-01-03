@@ -62,6 +62,7 @@ switch ($action) {
 
     case "show_dashboard":
         $title = "Dashboard";
+        $weeklyMatrix = $task->getWeeklyTaskMatrix($_SESSION['user_id']);
         require_once("../views/dashboard.php");
         break;
 
