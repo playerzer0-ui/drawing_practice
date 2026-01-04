@@ -1,7 +1,9 @@
 .gallery {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
 .month-group {
@@ -9,6 +11,7 @@
     border: 2px solid black;
     border-radius: 12px;
     overflow: hidden;
+    width: 100%;
 }
 
 .month-header {
@@ -23,6 +26,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .month-header:hover {
@@ -33,11 +37,12 @@
     display: none;
     padding: 20px;
     gap: 20px;
+    box-sizing: border-box;
 }
 
 .month-content.open {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 }
 
 .chevron {
@@ -48,20 +53,25 @@
     transform: rotate(180deg);
 }
 
-
 /* Card container */
 .task-card {
     border: 2px solid #000;
     border-radius: 12px;
     padding: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     background: #fff;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 /* Top metadata */
 .task-meta {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
+    gap: 10px;
     font-size: 0.9rem;
     margin-bottom: 12px;
 }
@@ -70,13 +80,18 @@
 .image-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 20px;
+    align-items: start;
 }
 
 .image-pair img {
     width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
     border-radius: 10px;
-    object-fit: cover;
+    display: block;
+    margin: 0 auto;
 }
 
 /* Individual image box */
@@ -86,6 +101,7 @@
     border-radius: 8px;
     overflow: hidden;
     background: #f8f8f8;
+    width: 100%;
 }
 
 .image-box img {
@@ -105,6 +121,7 @@
     padding: 4px 8px;
     font-size: 0.75rem;
     border-radius: 4px;
+    z-index: 1;
 }
 
 /* Footer */
@@ -114,9 +131,98 @@
     color: #555;
 }
 
-/* Responsive */
+/* Responsive improvements */
+@media (max-width: 1200px) {
+    .gallery {
+        padding: 12px;
+    }
+    
+    .month-content.open {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+}
+
 @media (max-width: 768px) {
+    .gallery {
+        padding: 10px;
+    }
+    
+    .month-group {
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .month-header {
+        padding: 12px 15px;
+        font-size: 1.1rem;
+    }
+    
+    .month-content.open {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .task-card {
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
     .image-pair {
         grid-template-columns: 1fr;
+        gap: 15px;
     }
+    
+    .image-pair img {
+        max-height: 300px;
+    }
+    
+    .task-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery {
+        padding: 8px;
+    }
+    
+    .month-header {
+        padding: 10px 12px;
+        font-size: 1rem;
+    }
+    
+    .month-content.open {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .task-card {
+        padding: 10px;
+        border-width: 1px;
+    }
+    
+    .image-pair {
+        gap: 12px;
+    }
+    
+    .image-pair img {
+        aspect-ratio: 1 / 1;
+    }
+}
+
+/* Prevent horizontal overflow */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+main {
+    width: 100%;
+    overflow-x: hidden;
 }
