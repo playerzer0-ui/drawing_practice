@@ -121,20 +121,38 @@
     justify-content: center;
     gap: 20px;
     padding: 10px;
+    flex-wrap: wrap; /* Added for responsiveness */
 }
 
 .row > div {
     border: 2px solid black;
     border-radius: 10px;
     padding: 20px;
+    box-sizing: border-box; /* Added for proper sizing */
 }
 
-.row > :nth-child(1) {
-    flex: 40%;
+/* Profile and options row */
+.row:nth-of-type(1) > :nth-child(1) {
+    flex: 1 1 300px; /* flex-grow, flex-shrink, flex-basis */
+    min-width: 300px;
 }
 
-.row > :nth-child(2) {
-    flex: 60%;
+.row:nth-of-type(1) > :nth-child(2) {
+    flex: 2 1 600px;
+    min-width: 300px;
+}
+
+/* Chart and table row */
+.row:nth-of-type(2) > :nth-child(1) {
+    flex: 1 1 400px;
+    min-width: 300px;
+    overflow-x: auto;
+}
+
+.row:nth-of-type(2) > :nth-child(2) {
+    flex: 2 1 600px;
+    min-width: 300px;
+    overflow-x: auto;
 }
 
 .profile-info {
@@ -159,8 +177,8 @@
 }
 
 .dashboard-options a button img {
-    width: 200px;
-    height: 200px;
+    width: 80%;
+    height: 80%;
     border: 2px solid black;
     border-radius: 10px;
     transition: transform 0.3s, box-shadow 0.3s;
@@ -212,6 +230,7 @@ tr:hover {
     display: flex;
     align-items: center;
     gap: 12px;
+    overflow: auto;
 }
 
 .main-header h1 {
