@@ -192,9 +192,11 @@ switch ($action) {
         header("Location: ../controller/index.php?action=show_" . $task_type . "_tasks");
         break;
 
-    case "show_profile":
-        $title = "Profile";
-        require_once("../views/profile.php");
+    case "get_year_task_matrix":
+        $year = filter_input(INPUT_GET, "year", FILTER_VALIDATE_INT) ?? date("Y");
+        $matrix = $task->getYearTaskMatrix($_SESSION['user_id'], $year);
+        header('Content-Type: application/json');
+        echo json_encode($matrix);
         break;
 
     case "show_loading":

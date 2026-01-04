@@ -125,4 +125,59 @@ class Task
 
         return $matrix;
     }
+
+    public function getYearTaskMatrix(string $userID, $year): array
+    {
+        $sql = "
+        SELECT
+            MONTH(created_at) AS month_index,
+            task_type,
+            COUNT(*) AS total
+        FROM tasks
+        WHERE userID = :userID
+        AND YEAR(created_at) = :year
+        GROUP BY month_index, task_type
+        ORDER BY month_index
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':userID', $userID);
+        $stmt->bindValue(':year', $year);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        // Month labels
+        $months = [
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December'
+        ];
+
+        // Initialize matrix with zeros
+        $matrix = [];
+        foreach ($months as $month) {
+            $matrix[$month] = [
+                'line_tracing' => 0,
+                'object_to_drawing' => 0,
+                'prompt_to_picture' => 0
+            ];
+        }
+        // Fill matrix with actual data
+        foreach ($rows as $row) {
+            $monthName = $months[(int)$row['month_index']];
+            $matrix[$monthName][$row['task_type']] = (int)$row['total'];
+        }
+        return $matrix;
+    }
+        
 }
