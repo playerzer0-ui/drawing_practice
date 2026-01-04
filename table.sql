@@ -31,4 +31,3 @@ WHERE userID = "db27a5dc-e0bd-acfe-4186-0b0d2cfe4be2"
         CURDATE() - INTERVAL (DAYOFWEEK(CURDATE()) - 1) DAY
         + INTERVAL 7 DAY
       );
-

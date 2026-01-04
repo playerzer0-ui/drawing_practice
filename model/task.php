@@ -11,6 +11,52 @@ class Task
         $this->db = $db;
     }
 
+    public function getAllTasks(string $userID, ?string $year = null): array
+    {
+        if (is_null($year)) {
+            $year = date("Y");
+        }
+
+        $query = "
+        SELECT
+            id,
+            task_type,
+            description,
+            original_image_url,
+            image_url,
+            userID,
+            created_at,
+
+            -- UI helpers
+            DATE_FORMAT(created_at, '%M %Y') AS month_year,
+            MONTH(created_at) AS month_index,
+            DATE_FORMAT(created_at, '%b %d') AS day_label,
+
+            -- Pretty labels
+            CASE task_type
+                WHEN 'line_tracing' THEN 'Line Tracing'
+                WHEN 'object_to_drawing' THEN 'Object → Drawing'
+                WHEN 'prompt_to_picture' THEN 'Prompt → Picture'
+                ELSE task_type
+            END AS task_label
+
+        FROM tasks
+        WHERE userID = :userID
+          AND YEAR(created_at) = :year
+        ORDER BY created_at DESC
+    ";
+
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':userID', $userID);
+        $statement->bindValue(':year', $year);
+        $statement->execute();
+        $tasks = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $statement->closeCursor();
+
+        return $tasks;
+    }
+
+
     public function submitTask(
         string $id,
         string $task_type,
@@ -23,7 +69,7 @@ class Task
         (id, task_type, description, original_image_url, image_url, userID)
         VALUES
         (:id, :task_type, :description, :original_image_url, :image_url, :userID)
-    ";
+        ";
 
         $statement = $this->db->prepare($query);
         $statement->bindValue(':id', $id);
@@ -88,7 +134,7 @@ class Task
           AND created_at <  (CURDATE() - INTERVAL (DAYOFWEEK(CURDATE()) - 1) DAY + INTERVAL 7 DAY)
         GROUP BY day_index, task_type
         ORDER BY day_index
-    ";
+        ";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':userID', $userID);
@@ -179,5 +225,4 @@ class Task
         }
         return $matrix;
     }
-        
 }

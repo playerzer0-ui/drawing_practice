@@ -199,6 +199,13 @@ switch ($action) {
         echo json_encode($matrix);
         break;
 
+    case "show_progress":
+        $title = "Progress";
+        $year = filter_input(INPUT_GET, "year", FILTER_VALIDATE_INT) ?? date("Y");
+        $tasks = $task->getAllTasks($_SESSION['user_id'], (string)$year);
+        require_once("../views/progress.php");
+        break;
+
     case "show_loading":
         $title = "Loading...";
         require_once("../views/loading.php");

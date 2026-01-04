@@ -14,6 +14,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
         <link rel="stylesheet" href="../css/styles.css">
         <link rel="stylesheet" href="../css/loader.css">
+        <link rel="stylesheet" href="../css/progress.css">
     </head>
     <body>
         <nav class="main-header">
@@ -22,6 +23,7 @@
             <a href="../controller/index.php?action=show_line_tracing_tasks"><button class="header-btn">& Line Tracing Tasks &</button></a>
             <a href="../controller/index.php?action=show_object_to_drawing_tasks"><button class="header-btn">$ Object to Drawing Tasks $</button></a>
             <a href="../controller/index.php?action=show_prompt_to_picture_tasks"><button class="header-btn"># Prompt to Picture Tasks #</button></a>
+            <a href="../controller/index.php?action=show_progress"><button class="header-btn">- progress -</button></a>
         </nav>
         <div class="loader-UI" id="loader">
             <h1>Loading...</h1>
