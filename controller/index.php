@@ -4,6 +4,7 @@ session_start();
 require_once("../model/database.php");
 require_once("../model/user.php");
 require_once("../model/task.php");
+require_once("../model/pdf_creation.php");
 
 $action = filter_input(INPUT_GET, "action") ?? "show_login";
 $publicActions = ["show_login", "login", "register"];
@@ -204,6 +205,60 @@ switch ($action) {
         $year = filter_input(INPUT_GET, "year", FILTER_VALIDATE_INT) ?? date("Y");
         $tasks = $task->getAllTasks($_SESSION['user_id'], (string)$year);
         require_once("../views/progress.php");
+        break;
+
+    case "get_PDF":
+        $year = filter_input(INPUT_GET, "year", FILTER_VALIDATE_INT) ?? date("Y");
+
+        $matrix = $task->getYearTaskMatrix($_SESSION['user_id'], $year);
+        $tasks  = $task->getAllTasks($_SESSION['user_id'], (string)$year);
+
+        $pdf = new ProgressPDF();
+        $pdf->AddPage();
+
+        /* ---------- SUMMARY ---------- */
+
+        $taskLabels = [
+            'line_tracing' => 'Line Tracing',
+            'object_to_drawing' => 'Object -> Drawing',
+            'prompt_to_picture' => 'Prompt -> Picture'
+        ];
+
+        // Find max for scaling
+        $maxValue = 0;
+        foreach ($matrix as $m) {
+            $maxValue = max($maxValue, max($m));
+        }
+
+        foreach ($matrix as $month => $data) {
+            $pdf->MonthHeader("$month $year");
+            foreach ($taskLabels as $key => $label) {
+                $pdf->BarRow($label, $data[$key], $maxValue);
+            }
+        }
+
+        /* ---------- GALLERY ---------- */
+
+        $currentMonth = null;
+
+        foreach ($tasks as $task) {
+            if ($currentMonth !== $task['month_year']) {
+                $currentMonth = $task['month_year'];
+                $pdf->GalleryHeader($currentMonth);
+            }
+
+            $pdf->ImagePair(
+                $task['original_image_url'],
+                "../" . $task['image_url'],
+                $task['description'],
+                ucfirst(str_replace('_', ' ', $task['task_type'])) .
+                    " = " . date('d M Y', strtotime($task['created_at'])),
+                85,  // Increased width for better visibility
+                85   // Increased height
+            );
+        }
+
+        $pdf->Output('I', "progress_$year.pdf");
         break;
 
     case "show_loading":

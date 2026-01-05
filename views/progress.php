@@ -2,19 +2,28 @@
 
 <main>
     <section class="gallery">
+        <?php
+        $currentYear = date("Y");
+        $selectedYear = isset($_GET['year']) ? $_GET['year'] : $currentYear;
+        ?>
+
         <form action="../controller/index.php" method="get" id="year-form">
             <input type="hidden" name="action" value="show_progress">
             <label for="year-select">Select Year:</label>
             <select id="year-select" name="year">
                 <?php
-                $currentYear = date("Y");
                 for ($year = $currentYear; $year >= $currentYear - 5; $year--) {
-                    echo "<option value=\"$year\">$year</option>";
+                    $selected = ($year == $selectedYear) ? 'selected' : '';
+                    echo "<option value=\"$year\" $selected>$year</option>";
                 }
                 ?>
             </select>
             <button class="header-btn" type="submit">Go</button>
         </form>
+
+        <a target="_blank" href="../controller/index.php?action=get_PDF&year=<?= $selectedYear ?>">
+            <button class="header-btn">Download PDF</button>
+        </a>
 
         <?php
         $currentMonth = null;
@@ -72,23 +81,18 @@
 </main>
 
 <script>
-document.querySelectorAll(".month-header").forEach(header => {
-    header.addEventListener("click", () => {
-
-        const targetId = header.dataset.target;
-        const content = document.getElementById(targetId);
-
-        // Optional: close other months
-        document.querySelectorAll(".month-content").forEach(c => {
-            if (c !== content) c.classList.remove("open");
-        });
-
-        document.querySelectorAll(".month-header").forEach(h => {
-            if (h !== header) h.classList.remove("active");
-        });
-
-        content.classList.toggle("open");
-        header.classList.toggle("active");
+$(document).ready(function() {
+    $(".month-header").on("click", function() {
+        const targetId = $(this).data("target");
+        const content = $("#" + targetId);
+        
+        // Close other months
+        $(".month-content").not(content).removeClass("open");
+        $(".month-header").not(this).removeClass("active");
+        
+        // Toggle current month
+        content.toggleClass("open");
+        $(this).toggleClass("active");
     });
 });
 </script>

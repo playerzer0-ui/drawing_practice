@@ -19,5 +19,4 @@ todo:
 - [x] maybe I need a loading screen for all this loading
 - [x] add charts
 - [x] I got a btter idea, add a new column for original image, that way u have the power to compare stuff
-
-- [] provide reports every month
+- [x] provide reports every month
